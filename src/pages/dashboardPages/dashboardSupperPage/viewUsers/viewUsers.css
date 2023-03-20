@@ -1,0 +1,21 @@
+.usersTableStyle {
+    width: 100%;
+    padding: 5%;
+    padding-top: 10%;
+}
+
+.textPopup {
+    width: 500px;
+}
+
+@media screen and (min-width: 600px) and (max-width: 1000px) {
+    .textPopup {
+        width: 300px;
+    }
+}
+
+@media screen and (min-width: 100px) and (max-width: 599px) {
+    .textPopup {
+        width: 200px;
+    }
+}

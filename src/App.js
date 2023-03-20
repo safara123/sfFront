@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import LoginPage from "./pages/loginPage/loginPage";
+import DashboardSupperPage from "./pages/dashboardPages/dashboardSupperPage/dashboardSupperPage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+      <Route exact path="/" element={<LoginPage />} />
+      <Route exact path="/dashboardSupperPage" element={<DashboardSupperPage />} />
+      {/* <Route exact path="/dashboardEmployeePage" element={<DashboardEmployeePage />} /> */}
+      {/* <Route exact path="/dashboardSupperPage/createFolders" element={<CreateFolderPage />} />
+      <Route exact path="/dashboardSupperPage/createFiles" element={<CreateFilePage />} /> */}
+      <Route path="/404" element={<div>page not found</div>}/>
+      </Routes>
+    </Router>
   );
 }
 

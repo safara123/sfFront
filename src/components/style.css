@@ -1,0 +1,29 @@
+.TableRow:hover {
+    background-color: #F5F5F5;
+}
+
+.loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.isLoadingTableStyle {
+    opacity: 0.5;
+}
+.editTitleContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: stretch;
+}
+.attachmentDelete {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    align-content: stretch;
+}
