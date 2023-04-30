@@ -45,8 +45,14 @@ const DashboardSupperPage = () => {
     const [page, setPage] = useState(1);
     const [pageData, setPageData] = useState(1);
     const [count, setCount] = useState(0);
+    const [pageDataFolders, setPageDataFolders] = useState(1);
+    const [countFolders, setCountFolders] = useState(0);
+    const [pageDataFiles, setPageDataFiles] = useState(1);
+    const [countFiles, setCountFiles] = useState(0);
     const dispatch = useDispatch();
     const pageSize = 6;
+    const pageSizeFolder = 6;
+    const pageSizeFile = 6;
     const [searchTerm, setSearchTerm] = useState(false);
     const [drawerSearch, setDrawerSearch] = useState(false);
     const [folderSearch, setFolderSearch] = useState(false);
@@ -209,7 +215,7 @@ const DashboardSupperPage = () => {
             setLoading(true);
             axios
                 .get(
-                    `${REACT_APP_API_ENDPOINT}/${user.role}/getFoldersPagination?drawerId=${drawerId}`,
+                    `${REACT_APP_API_ENDPOINT}/${user.role}/getFoldersPagination?drawerId=${drawerId}&size=${pageSizeFolder}&page=${pageDataFolders}`,
                     {
                         headers: {
                             "x-access-token": user.token,
@@ -219,31 +225,7 @@ const DashboardSupperPage = () => {
                 )
                 .then((response) => {
                     setElements(response.data.folder);
-
-                    // setCount(response.data.count);
-                    setLoading(false);
-                })
-                .catch((err) => {
-                    dispatch(logout());
-                    navigate("/");
-                });
-        }
-        if ((folderSearch === "" || folderSearch === false) && drawerId) {
-            setLoading(true);
-            axios
-                .get(
-                    `${REACT_APP_API_ENDPOINT}/${user.role}/getFoldersPagination?drawerId=${drawerId}`,
-                    {
-                        headers: {
-                            "x-access-token": user.token,
-                            "Content-Type": "application/json",
-                        },
-                    }
-                )
-                .then((response) => {
-                    setElements(response.data.folder);
-
-                    // setCount(response.data.count);
+                    setCountFolders(response.data.count);
                     setLoading(false);
                 })
                 .catch((err) => {
@@ -252,12 +234,12 @@ const DashboardSupperPage = () => {
                 });
         }
 
-        if (folderSearch !== false && folderSearch !== "") {
+        if (folderSearch !== false && folderSearch !== "" && drawerId) {
             setLoading(true);
             const delayDebounceFn = setTimeout(() => {
                 axios
                     .get(
-                        `${REACT_APP_API_ENDPOINT}/${user.role}/searchFolders?folderName=${folderSearch}`,
+                        `${REACT_APP_API_ENDPOINT}/${user.role}/searchFolders?drawerId=${drawerId}&folderName=${folderSearch}&size=${pageSizeFolder}&page=${pageDataFolders}`,
                         {
                             headers: {
                                 "x-access-token": user.token,
@@ -267,13 +249,13 @@ const DashboardSupperPage = () => {
                     )
                     .then((response) => {
                         setElements(response.data.folders);
-                        // setCount(response.data.count);
+                        setCountFolders(response.data.count);
                         setLoading(false);
                     });
             }, 1000);
             return () => clearTimeout(delayDebounceFn);
         }
-    }, [REACT_APP_API_ENDPOINT, folderSearch, drawerId, reloadingFolder]);
+    }, [REACT_APP_API_ENDPOINT, folderSearch, pageDataFolders, drawerId, reloadingFolder]);
 
 
     useEffect(() => {
@@ -287,7 +269,7 @@ const DashboardSupperPage = () => {
             setLoading(true);
             axios
                 .get(
-                    `${REACT_APP_API_ENDPOINT}/${user.role}/getFilesPagination?folderId=${folderId}`,
+                    `${REACT_APP_API_ENDPOINT}/${user.role}/getFilesPagination?folderId=${folderId}&size=${pageSizeFile}&page=${pageDataFiles}`,
                     {
                         headers: {
                             "x-access-token": user.token,
@@ -297,20 +279,19 @@ const DashboardSupperPage = () => {
                 )
                 .then((response) => {
                     setFiles(response.data.file);
-                    // setCount(response.data.count);    
-                    // setCount(response.data.count);
+                    setCountFiles(response.data.count);
                     setLoading(false);
                 })
                 .catch((err) => {
                 });
         }
 
-        if (fileSearch !== false && fileSearch !== "") {
+        if (fileSearch !== false && fileSearch !== "" && folderId) {
             setLoading(true);
             const delayDebounceFn = setTimeout(() => {
                 axios
                     .get(
-                        `${REACT_APP_API_ENDPOINT}/${user.role}/searchFiles?fileName=${fileSearch}`,
+                        `${REACT_APP_API_ENDPOINT}/${user.role}/searchFiles?fileName=${fileSearch}&folderId=${folderId}&size=${pageSizeFile}&page=${pageDataFiles}`,
                         {
                             headers: {
                                 "x-access-token": user.token,
@@ -320,38 +301,23 @@ const DashboardSupperPage = () => {
                     )
                     .then((response) => {
                         setFiles(response.data.files);
-                        // setCount(response.data.count);
+                        setCountFiles(response.data.count);
                         setLoading(false);
                     });
             }, 1000);
             return () => clearTimeout(delayDebounceFn);
         }
-    }, [REACT_APP_API_ENDPOINT, fileSearch, folderId, reloadingFile]);
+    }, [REACT_APP_API_ENDPOINT, fileSearch, pageDataFiles, folderId, reloadingFile]);
 
     const onPageChange = (event, value) => {
         setPageData(value);
     };
 
-    const getFilesByFolderId = (id) => {
-        setLoading(true);
-        axios
-            .get(
-                `${REACT_APP_API_ENDPOINT}/${user.role}/getFilesPagination?folderId=${id}&size=${pageSize}&page=${pageData}`,
-                {
-                    headers: {
-                        "x-access-token": user.token,
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
-            .then((response) => {
-                setLoading(false);
-                setFiles(response.data.file);
-                setCount(response.data.count);
-            })
-            .catch((err) => {
-            });
-
+    const onPageFoldersChange = (event, value) => {
+        setPageDataFolders(value);
+    };
+    const onPageFilesChange = (event, value) => {
+        setPageDataFiles(value);
     };
 
 
@@ -369,7 +335,7 @@ const DashboardSupperPage = () => {
                             <Grid item xs={12}>
 
                                 <Paper style={{ width: '100%' }} sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                    <div className="seeButtons">
+                                    {user.role != 'user' && <div className="seeButtons">
                                         <Button variant="contained" color="primary"
                                             onClick={() => {
                                                 setStatus(2);
@@ -388,16 +354,16 @@ const DashboardSupperPage = () => {
                                             See All Files
                                             <VisibilityIcon />
                                         </Button>
-                                    </div>
+                                    </div>}
 
                                     {
-                                        status === 1 && <Table eventsList={allDrawers} eventsTitleList={drawersTitleList} viewFolders={true} status={status} setStatus={setStatus} setElements={setElements} getFilesByFolderId={getFilesByFolderId} drawerName={drawerName} setDrawerName={setDrawerName} loading={loading} setLoading={setLoading} setDrawerSearch={setDrawerSearch} drawerSearch={drawerSearch} setFolderSearch={setFolderSearch} folderSearch={folderSearch} drawerId={drawerId} folderId={folderId} setDrawerId={setDrawerId} setFolderId={setFolderId} fileSearch={fileSearch} setFileSearch={setFileSearch} setReloading={setReloading} reloading={reloading} setReloadingFolder={setReloadingFolder} setReloadingFile={setReloadingFile} />
+                                        status === 1 && <Table eventsList={allDrawers} eventsTitleList={drawersTitleList} viewFolders={true} status={status} setStatus={setStatus} setElements={setElements} drawerName={drawerName} setDrawerName={setDrawerName} loading={loading} setLoading={setLoading} setDrawerSearch={setDrawerSearch} drawerSearch={drawerSearch} setFolderSearch={setFolderSearch} folderSearch={folderSearch} drawerId={drawerId} folderId={folderId} setDrawerId={setDrawerId} setFolderId={setFolderId} fileSearch={fileSearch} setFileSearch={setFileSearch} setReloading={setReloading} reloading={reloading} setReloadingFolder={setReloadingFolder} setReloadingFile={setReloadingFile} />
                                     }
                                     {
-                                        status === 2 && <Table eventsList={allFiles} eventsTitleList={foldersTitleList} viewFolders={true} status={status} setStatus={setStatus} setElements={setElements} getFilesByFolderId={getFilesByFolderId} drawerName={drawerName} setDrawerName={setDrawerName} loading={loading} setLoading={setLoading} setDrawerSearch={setDrawerSearch} drawerSearch={drawerSearch} setFolderSearch={setFolderSearch} folderSearch={folderSearch} drawerId={drawerId} folderId={folderId} setDrawerId={setDrawerId} setFolderId={setFolderId} fileSearch={fileSearch} setFileSearch={setFileSearch} setReloading={setReloading} reloading={reloading}  setReloadingFolder={setReloadingFolder} setReloadingFile={setReloadingFile}/>
+                                        status === 2 && <Table eventsList={allFiles} eventsTitleList={foldersTitleList} viewFolders={true} status={status} setStatus={setStatus} setElements={setElements} drawerName={drawerName} setDrawerName={setDrawerName} loading={loading} setLoading={setLoading} setDrawerSearch={setDrawerSearch} drawerSearch={drawerSearch} setFolderSearch={setFolderSearch} folderSearch={folderSearch} drawerId={drawerId} folderId={folderId} setDrawerId={setDrawerId} setFolderId={setFolderId} fileSearch={fileSearch} setFileSearch={setFileSearch} setReloading={setReloading} reloading={reloading} setReloadingFolder={setReloadingFolder} setReloadingFile={setReloadingFile} />
                                     }
                                     {
-                                        status === 3 && <Table eventsList={files} eventsTitleList={filesTitleList} viewFolders={true} status={status} setStatus={setStatus} setElements={setElements} getFilesByFolderId={getFilesByFolderId} drawerName={drawerName} setDrawerName={setDrawerName} loading={loading} setLoading={setLoading} setDrawerSearch={setDrawerSearch} drawerSearch={drawerSearch} setFolderSearch={setFolderSearch} folderSearch={folderSearch} drawerId={drawerId} folderId={folderId} setDrawerId={setDrawerId} setFolderId={setFolderId} fileSearch={fileSearch} setFileSearch={setFileSearch} setReloading={setReloading} reloading={reloading}  setReloadingFolder={setReloadingFolder} setReloadingFile={setReloadingFile}/>
+                                        status === 3 && <Table eventsList={files} eventsTitleList={filesTitleList} viewFolders={true} status={status} setStatus={setStatus} setElements={setElements} drawerName={drawerName} setDrawerName={setDrawerName} loading={loading} setLoading={setLoading} setDrawerSearch={setDrawerSearch} drawerSearch={drawerSearch} setFolderSearch={setFolderSearch} folderSearch={folderSearch} drawerId={drawerId} folderId={folderId} setDrawerId={setDrawerId} setFolderId={setFolderId} fileSearch={fileSearch} setFileSearch={setFileSearch} setReloading={setReloading} reloading={reloading} setReloadingFolder={setReloadingFolder} setReloadingFile={setReloadingFile} />
                                     }
                                 </Paper>
                             </Grid>
@@ -414,6 +380,34 @@ const DashboardSupperPage = () => {
                                 style={{ backgroundColor: 'gray' }}
                             />
                         }
+
+                        {
+                            status == 2 && <Pagination
+                                shape="rounded"
+                                classes={{ ul: classes.ul }}
+                                count={Math.ceil(countFolders / pageDataFolders)}
+                                showFirstButton
+                                showLastButton
+                                color="primary"
+                                onChange={onPageFoldersChange}
+                                style={{ backgroundColor: 'gray' }}
+                            />
+                        }
+
+                        {
+                            status == 3 && <Pagination
+                                shape="rounded"
+                                classes={{ ul: classes.ul }}
+                                count={Math.ceil(countFiles / pageDataFiles)}
+                                showFirstButton
+                                showLastButton
+                                color="primary"
+                                onChange={onPageFilesChange}
+                                style={{ backgroundColor: 'gray' }}
+                            />
+                        }
+
+
                     </Container>
                 }
                 {

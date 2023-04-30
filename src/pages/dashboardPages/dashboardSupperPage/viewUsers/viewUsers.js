@@ -51,8 +51,11 @@ const ViewUsersSupperPage = (props) => {
         },
         {
             key: "Reset"
+        },
+        {
+            key: "Add permission"
         }
-    ];
+        ];
 
     useEffect(() => {
         window.scroll({
@@ -131,6 +134,11 @@ const ViewUsersSupperPage = (props) => {
                 setPassAlert(false)
             });
     }
+    const goToEditPermission = (userId, username) => {
+        navigate("/singleUserAccess?id="+ userId + "&name="+ username);
+
+    }
+
 
     return (
         <div className="usersTableStyle">
@@ -239,7 +247,6 @@ const ViewUsersSupperPage = (props) => {
                                     <TableCell>{row.email}</TableCell>
                                     <TableCell>{row.rol}</TableCell>
                                     <TableCell>
-
                                         <Button variant="contained" color="error" style={{ width: '100%', marginBottom: '10%', marginTop: '10%' }}
                                             startIcon={<DeleteForeverIcon />}
                                             onClick={() => {
@@ -251,7 +258,6 @@ const ViewUsersSupperPage = (props) => {
                                             Delete
                                         </Button>
                                     </TableCell>
-
                                     <TableCell>
                                         <Button variant="contained" color="success" style={{ width: '100%', marginBottom: '10%', marginTop: '10%' }}
                                             startIcon={<LockResetIcon />}
@@ -264,6 +270,25 @@ const ViewUsersSupperPage = (props) => {
                                             Reset
                                         </Button>
                                     </TableCell>
+                                    <TableCell>
+                                        <Button variant="contained" color="primary" style={{ width:'100%', marginBottom: '1%', marginTop: '1%', fontSize:'70%', whiteSpace:'nowrap' }}
+                                            onClick={() => {
+                                                window.open("/singleUserAccess?id="+ row._id + "&name="+ row.name,'_blank')
+                                            }}
+                                        >
+                                            Add Permission
+                                        </Button>
+                                        <Button variant="contained" color="error" style={{  width:'100%', marginBottom: '1%', marginTop: '1%', fontSize:'70%', whiteSpace:'nowrap' }}
+                                            startIcon={<DeleteForeverIcon />}
+                                            onClick={() => {
+                                                window.open("/deleteSingleUserAccess?id="+ row._id + "&name="+ row.name,'_blank')
+                                            }}
+                                        >
+                                            Delete Permission
+                                        </Button>
+
+                                    </TableCell>
+
                                 </TableRow>
                             ))}
                         </TableBody>

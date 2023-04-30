@@ -47,7 +47,6 @@ export default function Orders(props) {
   const reloading = props.reloading;
   const setFileSearch = props.setFileSearch;
   const setFolderId = props.setFolderId
-  const getFilesByFolderId = props.getFilesByFolderId;
   const setElements = props.setElements;
   const setDrawerSearch = props.setDrawerSearch;
   const drawerSearch = props.drawerSearch;
