@@ -14,7 +14,6 @@ function App() {
       <Route exact path="/dashboardSupperPage" element={<DashboardSupperPage />} />
       <Route exact path="/singleUserAccess" element={<SingleUserAccess />} />
       <Route exact path="/deleteSingleUserAccess" element={<DeleteSingleUserAccessPage />} />
-deleteSingleUserAccess
       {/* <Route exact path="/dashboardEmployeePage" element={<DashboardEmployeePage />} /> */}
       {/* <Route exact path="/dashboardSupperPage/createFolders" element={<CreateFolderPage />} />
       <Route exact path="/dashboardSupperPage/createFiles" element={<CreateFilePage />} /> */}

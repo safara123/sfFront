@@ -61,6 +61,7 @@ export default function Orders(props) {
   const [edit, setEdit] = useState(false);
   const [editFolder, setEditFolder] = useState(false);
   const [editFile, setEditFile] = useState(false);
+  const [editId, setEditId] = useState('');
   const [isOut, setIsOut] = useState(false);
   const [isIn, setIsIn] = useState(false);
   const [openDelete, openDeleteStatus] = useState(false);
@@ -81,6 +82,10 @@ export default function Orders(props) {
     var options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
     return new Date(string).toLocaleDateString([], options);
   }
+
+
+  useEffect(() => {
+  }, [])
 
   function includeInList(list, id) {
     for (let i = 0; i < list.length; i++) {
@@ -545,17 +550,20 @@ export default function Orders(props) {
           </TableRow>
         </TableHead>
         <TableBody>
+
           {status === 1 && !loading && props.eventsList.map((row) => (
             // (user.role != "user" || includeInList(row.usersList, user.id)) &&
+
             <TableRow style={{ cursor: 'pointer', position: 'relative' }} className='TableRow' key={row._id}>
               {/* <TableCell>{row._id}</TableCell> */}
+
               <TableCell onClick={() => {
                 setDrawerId(row._id);
                 setDrawerName(row.name);
                 setStatus(2);
               }}>{row?.drawerNumber}
               </TableCell>
-              {!edit && <TableCell onClick={() => {
+              {editId != row._id && <TableCell onClick={() => {
                 setDrawerId(row._id);
                 setDrawerName(row.name);
                 setStatus(2);
@@ -566,19 +574,22 @@ export default function Orders(props) {
                 {row.name}
               </TableCell>
               }
-              {edit && <TableCell data-aos="fade-left"
+              {editId === row._id && <TableCell data-aos="fade-left"
               >
                 <TextField id="drawerIdForName" label="Edit drawer name" variant="standard" style={{ width: '100%' }}
                   onChange={(e) => setEditDrawerName(e.target.value)}
                 />
               </TableCell>
               }
-              {!edit && <TableCell>
-                <EditIcon onClick={() => { setEdit(true) }} />
+              {editId != row._id && <TableCell>
+                <EditIcon onClick={() => {
+                  setEdit(true);
+                  setEditId(row._id)
+                }} />
               </TableCell>
               }
-              {edit && <TableCell>
-                <CheckCircleOutlineIcon onClick={() => { editDrawerName(row._id) }} />
+              {editId === row._id && <TableCell>
+                <CheckCircleOutlineIcon onClick={() => { editDrawerName(row._id); setEditId('') }} />
               </TableCell>
               }
 

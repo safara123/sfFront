@@ -7,6 +7,7 @@ import NativeSelect from '@mui/material/NativeSelect';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
+import { Closets, Shulters } from "../../../../services/Data";
 import TextField from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
 
@@ -18,6 +19,10 @@ const CreateFilePage = () => {
     const [fileName, setFileName] = useState("");
     const [color, setColor] = useState("");
     const [attachment, setAttachment] = useState("");
+    const [allDrawers, setAllDrawers] = useState(null);
+    const [drawerId, setDrawerId] = useState("null");
+    const [closet, setCloset] = useState("I");
+    const [shulter, setShulter] = useState("a");
     const [folderId, setFolderId] = useState();
     const [foldersList, setFoldersList] = useState();
     const user = useSelector((state) => state.userSlice.user);
@@ -25,8 +30,9 @@ const CreateFilePage = () => {
     const [error, setError] = useState(false);
 
     useEffect(() => {
+        if (drawerId != "null") {
         axios
-            .get(`${REACT_APP_API_ENDPOINT}/${user.role}/getAllFolders`,
+            .get(`${REACT_APP_API_ENDPOINT}/${user.role}/getAllFolders?drawerId=${drawerId}`,
                 {
                     headers: {
                         "x-access-token": user.token,
@@ -38,8 +44,8 @@ const CreateFilePage = () => {
                 setFoldersList(data.data);
             })
             .catch((err) => { });
-
-    }, [user])
+        }
+    }, [drawerId])
 
 
     const onSubmit = () => {
@@ -68,6 +74,22 @@ const CreateFilePage = () => {
 
     };
 
+    useEffect(() => {
+        axios
+            .get(`${REACT_APP_API_ENDPOINT}/${user.role}/getAllDrawers?closet=${closet}&shulter=${shulter}`,
+                {
+                    headers: {
+                        "x-access-token": user.token,
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+            .then((data) => {
+                setAllDrawers(data.data);
+            })
+            .catch((err) => { });
+    }, [closet, shulter])
+
     return (
         <>
             <Container maxWidth="lg" sx={{ mt: 18, mb: 18 }} >
@@ -77,9 +99,58 @@ const CreateFilePage = () => {
                     onChange={(e) => setColor(e.target.value)} />
                 <TextField id="attachment" label="Attachment" variant="standard" style={{ width: '100%', marginBottom: '3%' }}
                     onChange={(e) => setAttachment(e.target.value)} />
-                <InputLabel id="FoldersLabel">
-                    Folders
+                <InputLabel id="ClosetsLabel">
+                    Closets
                 </InputLabel>
+                <NativeSelect
+                    defaultValue={30}
+                    inputProps={{
+                        name: 'Closets',
+                        id: 'Closets',
+                    }}
+                    style={{ width: '100%', marginBottom: '3%' }}
+                    onClick={(e) => { setCloset(e.target.value) }}
+                >
+                    {Closets && Closets.map((closet) => (
+                        <option key={closet.id} value={closet.id}>{closet.id}</option>
+                    ))}
+                </NativeSelect>
+                <InputLabel id="ShultersLabel">
+                    Shulters
+                </InputLabel>
+                <NativeSelect
+                    defaultValue={30}
+                    inputProps={{
+                        name: 'Shulters',
+                        id: 'Shulters',
+                    }}
+                    style={{ width: '100%', marginBottom: '3%' }}
+                    onClick={(e) => { setShulter(e.target.value) }}
+                >
+                    {Shulters && Shulters.map((shulter) => (
+                        <option key={shulter.id} value={shulter.id}>{shulter.id}</option>
+                    ))}
+                </NativeSelect>
+                <InputLabel id="DrawersLabel">
+                    Drawers
+                </InputLabel>
+                <NativeSelect
+                    defaultValue={30}
+                    inputProps={{
+                        name: 'Drawer',
+                        id: 'Drawer',
+                    }}
+                    style={{ width: '100%', marginBottom: '3%' }}
+                    onClick={(e) => { setDrawerId(e.target.value) }}
+                >
+                    {allDrawers && allDrawers.map((d) => (
+                        <option key={d._id} value={d._id}>{d.name}</option>
+                    ))}
+                </NativeSelect>
+                <InputLabel id="DrawersLabel">
+                    Folder
+                </InputLabel>
+
                 <NativeSelect
                     defaultValue={30}
                     inputProps={{

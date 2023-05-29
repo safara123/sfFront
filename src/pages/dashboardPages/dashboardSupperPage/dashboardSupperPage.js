@@ -160,6 +160,7 @@ const DashboardSupperPage = () => {
         });
         if (drawerSearch === "" || drawerSearch === false) {
             setLoading(true);
+
             axios
                 .get(
                     `${REACT_APP_API_ENDPOINT}/${user.role}/getDrawersPagination?size=${pageSize}&page=${pageData}`,
@@ -369,7 +370,7 @@ const DashboardSupperPage = () => {
                             </Grid>
                         </Grid>
                         {
-                            status == 1 && <Pagination
+                            status == 1 && user && user.role != 'user' && <Pagination
                                 shape="rounded"
                                 classes={{ ul: classes.ul }}
                                 count={Math.ceil(count / pageSize)}

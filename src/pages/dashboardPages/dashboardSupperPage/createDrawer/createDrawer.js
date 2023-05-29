@@ -27,7 +27,7 @@ const CreateDrawerPage = () => {
 
 
     const onSubmit = () => {
-        if (isLoading === false) {
+        if (isLoading === false && name != '') {
             setIsLoading(true);
             axios
                 .post(
