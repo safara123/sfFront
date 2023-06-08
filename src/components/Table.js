@@ -62,6 +62,8 @@ export default function Orders(props) {
   const [editFolder, setEditFolder] = useState(false);
   const [editFile, setEditFile] = useState(false);
   const [editId, setEditId] = useState('');
+  const [editFolderId, setEditFolderId] = useState('');
+  const [editFileId, setEditFileId] = useState('');
   const [isOut, setIsOut] = useState(false);
   const [isIn, setIsIn] = useState(false);
   const [openDelete, openDeleteStatus] = useState(false);
@@ -624,7 +626,7 @@ export default function Orders(props) {
           {status === 2 && !loading && props.eventsList.map((row) => (
             <TableRow style={{ cursor: 'pointer', position: 'relative' }} className='TableRow' key={row._id}>
               {/* <TableCell>{row._id}</TableCell> */}
-              {!editFolder &&
+              {editFolderId != row._id &&
                 <TableCell onClick={() => {
                   setFolderId(row._id);
                   setStatus(3);
@@ -633,19 +635,19 @@ export default function Orders(props) {
                   style={{ width: '10%' }}>
                   {row?.folderName}</TableCell>
               }
-              {editFolder && <TableCell data-aos="fade-left"
+              {editFolderId === row._id && <TableCell data-aos="fade-left"
               >
                 <TextField id="folderIdForName" label="Edit folder name" variant="standard" style={{ width: '100%' }}
                   onChange={(e) => setEditFolderName(e.target.value)}
                 />
               </TableCell>
               }
-              {!editFolder && <TableCell>
-                <EditIcon onClick={() => { setEditFolder(true) }} />
+              {editFolderId != row._id && <TableCell>
+                <EditIcon onClick={() => { setEditFolder(true); setEditFolderId(row._id); }} />
               </TableCell>
               }
-              {editFolder && <TableCell>
-                <CheckCircleOutlineIcon onClick={() => { editFolderName(row._id) }} />
+              {editFolderId === row._id && <TableCell>
+                <CheckCircleOutlineIcon onClick={() => { editFolderName(row._id); setEditFolderId('');}} />
               </TableCell>
               }
 
@@ -723,25 +725,25 @@ export default function Orders(props) {
             <TableRow className='TableRow' key={row._id} style={{ cursor: "pointer" }}>
               {/* <TableCell>{row._id}</TableCell> */}
 
-              {!editFile &&
+              {editFileId != row._id &&
                 <TableCell
                   data-aos="fade-right"
                   style={{ width: '10%' }}>
                   {row?.fileName}</TableCell>
               }
-              {editFile && <TableCell data-aos="fade-left"
+              {editFileId === row._id && <TableCell data-aos="fade-left"
               >
                 <TextField id="fileIdForName" label="Edit file name" variant="standard" style={{ width: '100%' }}
                   onChange={(e) => setEditFileName(e.target.value)}
                 />
               </TableCell>
               }
-              {!editFile && <TableCell>
-                <EditIcon onClick={() => { setEditFile(true) }} />
+              {editFileId != row._id && <TableCell>
+                <EditIcon onClick={() => { setEditFile(true); setEditFileId(row._id) }} />
               </TableCell>
               }
-              {editFile && <TableCell>
-                <CheckCircleOutlineIcon onClick={() => { editFileName(row._id) }} />
+              {editFileId === row._id && <TableCell>
+                <CheckCircleOutlineIcon onClick={() => { editFileName(row._id);  setEditFileId('') }} />
               </TableCell>
               }
 
