@@ -54,6 +54,7 @@ export default function Orders(props) {
   const folderSearch = props.folderSearch;
   const user = useSelector((state) => state.userSlice.user);
   const [editDrawer, setEditDrawerName] = useState("");
+  const [editNumber, setEditNumber] = useState("");
   const [editFolderNameStatus, setEditFolderName] = useState("");
   const [editFileNameStatus, setEditFileName] = useState("");
   const [alert, setAlert] = useState(false);
@@ -62,6 +63,7 @@ export default function Orders(props) {
   const [editFolder, setEditFolder] = useState(false);
   const [editFile, setEditFile] = useState(false);
   const [editId, setEditId] = useState('');
+  const [editIdNumber, setEditIdNumber] = useState('');
   const [editFolderId, setEditFolderId] = useState('');
   const [editFileId, setEditFileId] = useState('');
   const [isOut, setIsOut] = useState(false);
@@ -323,6 +325,30 @@ export default function Orders(props) {
       });
   }
 
+  const editDrawerNumber = (drawerIdForNumber) => {
+    setReloading(false);
+    axios
+      .post(
+        `${REACT_APP_API_ENDPOINT}/${user.role}/editDrawerNumber`,
+        {
+          drawerNumber: editNumber,
+          drawerId: drawerIdForNumber,
+        },
+        {
+          headers: {
+            "x-access-token": user.token,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        setReloading(true);
+        setEdit(false)
+      })
+      .catch((err) => {
+      });
+  }
+
 
   const editFolderName = (folderIdForName) => {
     setReloadingFolder(false);
@@ -559,12 +585,37 @@ export default function Orders(props) {
             <TableRow style={{ cursor: 'pointer', position: 'relative' }} className='TableRow' key={row._id}>
               {/* <TableCell>{row._id}</TableCell> */}
 
-              <TableCell onClick={() => {
+              {editIdNumber != row._id && <TableCell onClick={() => {
                 setDrawerId(row._id);
                 setDrawerName(row.name);
                 setStatus(2);
-              }}>{row?.drawerNumber}
+              }}
+                data-aos="fade-right"
+                style={{ width: '20%' }}
+              >
+                {row?.drawerNumber}
               </TableCell>
+              }
+              {editIdNumber === row._id && <TableCell data-aos="fade-left"
+              >
+                <TextField id="drawerIdForName" label="Edit drawer name" variant="standard" style={{ width: '100%' }}
+                  onChange={(e) => setEditNumber(e.target.value)}
+                />
+              </TableCell>
+              }
+              {editIdNumber != row._id && <TableCell>
+                <EditIcon onClick={() => {
+                  setEditIdNumber(row._id)
+                }} />
+              </TableCell>
+              }
+              {editIdNumber === row._id && <TableCell>
+                <CheckCircleOutlineIcon onClick={() => { editDrawerNumber(row._id); setEditIdNumber('') }} />
+              </TableCell>
+              }
+
+
+
               {editId != row._id && <TableCell onClick={() => {
                 setDrawerId(row._id);
                 setDrawerName(row.name);
@@ -647,7 +698,7 @@ export default function Orders(props) {
               </TableCell>
               }
               {editFolderId === row._id && <TableCell>
-                <CheckCircleOutlineIcon onClick={() => { editFolderName(row._id); setEditFolderId('');}} />
+                <CheckCircleOutlineIcon onClick={() => { editFolderName(row._id); setEditFolderId(''); }} />
               </TableCell>
               }
 
@@ -655,7 +706,15 @@ export default function Orders(props) {
               <TableCell onClick={() => {
                 setFolderId(row._id);
                 setStatus(3);
-              }}>{row?.drawer?.name}</TableCell>
+              }}>
+                <p>
+                  SHULTER({row?.drawer?.shulter})
+                </p>
+                <p>
+                  CLOSET({row?.drawer?.closet})
+                </p>
+                {row?.drawer?.name}
+              </TableCell>
               <TableCell onClick={() => {
                 setFolderId(row._id);
                 setStatus(3);
@@ -743,7 +802,7 @@ export default function Orders(props) {
               </TableCell>
               }
               {editFileId === row._id && <TableCell>
-                <CheckCircleOutlineIcon onClick={() => { editFileName(row._id);  setEditFileId('') }} />
+                <CheckCircleOutlineIcon onClick={() => { editFileName(row._id); setEditFileId('') }} />
               </TableCell>
               }
 

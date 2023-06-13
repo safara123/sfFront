@@ -88,7 +88,7 @@ const SideNavComponent = (props) => {
 
 
     const toggleDrawer = () => {
-        setOpen(!open);
+        // setOpen(!open);
     };
 
     return (
@@ -135,9 +135,9 @@ const SideNavComponent = (props) => {
                         px: [1],
                     }}
                 >
-                    <IconButton onClick={toggleDrawer}>
+                    {/* <IconButton onClick={toggleDrawer}>
                         <ChevronLeftIcon />
-                    </IconButton>
+                    </IconButton> */}
                 </Toolbar>
                 <Divider />
                 <List>

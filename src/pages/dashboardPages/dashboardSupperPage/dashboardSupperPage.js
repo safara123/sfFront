@@ -72,6 +72,10 @@ const DashboardSupperPage = () => {
             key: "drawer number"
         },
         {
+            key: ""
+        },
+
+        {
             key: "title"
         },
         {
@@ -386,7 +390,7 @@ const DashboardSupperPage = () => {
                             status == 2 && <Pagination
                                 shape="rounded"
                                 classes={{ ul: classes.ul }}
-                                count={Math.ceil(countFolders / pageDataFolders)}
+                                count={Math.ceil(countFolders / 6)}
                                 showFirstButton
                                 showLastButton
                                 color="primary"

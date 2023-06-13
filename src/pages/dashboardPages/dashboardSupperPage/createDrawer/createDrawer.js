@@ -27,7 +27,10 @@ const CreateDrawerPage = () => {
 
 
     const onSubmit = () => {
-        if (isLoading === false && name != '') {
+        if (drawer === "please select a number") {
+            setError(true)
+        }
+        if (isLoading === false && name != '' && drawer != "please select a number") {
             setIsLoading(true);
             axios
                 .post(
