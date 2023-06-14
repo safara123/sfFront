@@ -32,9 +32,9 @@ const SideNavComponent = (props) => {
     const drawerWidth = 240;
 
     useEffect(() => {
-        if (user && user.role === "user") {
-            setOpen(false);
-        }
+        // if (user && user.role === "user") {
+        //     setOpen(false);
+        // }
     }, [])
 
     const AppBar = styled(MuiAppBar, {
