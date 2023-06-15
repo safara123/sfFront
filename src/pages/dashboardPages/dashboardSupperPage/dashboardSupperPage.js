@@ -403,7 +403,7 @@ const DashboardSupperPage = () => {
                             status == 3 && <Pagination
                                 shape="rounded"
                                 classes={{ ul: classes.ul }}
-                                count={Math.ceil(countFiles / pageDataFiles)}
+                                count={Math.ceil(countFiles / 6)}
                                 showFirstButton
                                 showLastButton
                                 color="primary"
