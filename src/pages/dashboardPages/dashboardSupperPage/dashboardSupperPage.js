@@ -340,7 +340,7 @@ const DashboardSupperPage = () => {
                             <Grid item xs={12}>
 
                                 <Paper style={{ width: '100%' }} sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                                    {user.role != 'user' && <div className="seeButtons">
+                                    {<div className="seeButtons">
                                         <Button variant="contained" color="primary"
                                             onClick={() => {
                                                 setStatus(2);
