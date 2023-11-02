@@ -32,24 +32,12 @@ export default function SignIn() {
     }, []);
 
     useEffect(() => {
-        navigateMap["supperadmin"] = "/dashboardSupperPage";
-        navigateMap["admin"] = "/dashboardSupperPage";
-        navigateMap["user"] = "/dashboardSupperPage";
-
         if (user) {
             navigate("/dashboardSupperPage");
             if (user.role === "supperadmin" || user.role === "admin" || user.role === "user") {
                 navigate("/dashboardSupperPage");
                 return;
             }
-            // if (user.role === "admin") {
-            //     navigate("/dashboardAdminPage");
-            //     return;
-            // }
-            // if (user.role === "user") {
-            //     navigate("/dashboardEmployeePage");
-            //     return;
-            // }
         }
     }, [])
 
@@ -80,7 +68,7 @@ export default function SignIn() {
                         token: response.data.token,
                     })
                 );
-                navigate(navigateMap[response.data.user.rol]);
+                navigate("/dashboardSupperPage");
             })
             .catch((err) => {
                 setAlert(true)

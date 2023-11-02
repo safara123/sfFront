@@ -52,6 +52,7 @@ const CreateDrawerPage = () => {
                     setIsLoading(false);
                     setName("")
                     setAlert(true)
+                    window.location.reload();
                 })
                 .catch((err) => {
                     setIsLoading(false);

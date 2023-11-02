@@ -343,8 +343,7 @@ const DashboardSupperPage = () => {
                                     {<div className="seeButtons">
                                         <Button variant="contained" color="primary"
                                             onClick={() => {
-                                                setStatus(2);
-                                                setDrawerId("folders");
+                                                window.open('/viewAllFolders', '_blank').focus()
                                             }}
                                         >
                                             See All Folder
@@ -352,8 +351,7 @@ const DashboardSupperPage = () => {
                                         </Button>
                                         <Button variant="contained" color="primary"
                                             onClick={() => {
-                                                setStatus(3);
-                                                setFolderId("files");
+                                                window.open('/viewAllFiles', '_blank').focus()
                                             }}
                                         >
                                             See All Files
